@@ -1,0 +1,32 @@
+#############################################################################################
+# Incluir aqui las propiedades a utilizar por Spring Boot y los componentes de la aplicación #
+##############################################################################################
+# ===================================================================
+# Spring Boot configuration properties
+# ===================================================================
+
+spring:
+
+
+
+
+# ===================================================================
+# Giss framework properties
+# ===================================================================
+giss:
+
+  audit:
+    enabled: false
+
+  security:
+    web:
+      fake:
+        enabled: true
+        roles: ROLE_GISS_ACTUATOR
+        authorities: READ_FAKE, WRITE_FAKE
+        type-of-user: INTRANET
+
+
+
+
+

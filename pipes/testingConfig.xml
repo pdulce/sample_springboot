@@ -1,0 +1,14 @@
+<testing>
+    <comun GIT_URL_TEST="https://gitlab.pro.portal.ss/ot/mad/ot_maca_catalogo_testing.git">
+        <default CT="true" TAG_TESTING="0.0.0-9-SNAPSHOT"/>
+        <int    CT="true"/>
+        <cer    CT="false"/>
+        <pre    CT="false"/>
+    </comun>
+	<regresion>
+                <default BROWSER= "edge" GIT_REGRESION_RELATIVE_PATH="SELENIUM_MAVEN"/>
+                <int	TEST_PARAMETERS="-s CatalogoTestSuite" BROWSER= "chrome"/>
+                <cer	BROWSER= "edge"/>
+                <pre	BROWSER= "firefox"  TEST_PARAMETERS="-s CatalogoTestSuite"/>
+	</regresion>
+</testing>

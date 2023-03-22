@@ -1,0 +1,57 @@
+#############################################################################################
+# Incluir aqui las propiedades a utilizar por Spring Boot y los componentes de la aplicación #
+##############################################################################################
+# ===================================================================
+# Spring Boot configuration properties
+# ===================================================================
+spring:
+
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: ${SECRET_MACA_DATASOURCE_URI}
+    username: ${SECRET_MACA_DATASOURCE_USERNAME}
+    password: ${SECRET_MACA_DATASOURCE_PASSWORD}
+
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle12cDialect
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+
+
+
+# ===================================================================
+# Giss framework properties
+# ===================================================================
+giss:
+
+  application:
+    name: mac0
+    capp-code: MACA
+    development-center: ced
+  kafka:
+    consumer-config:
+      key-deserializer: json
+      value-deserializer: json
+      consumers:
+        KafkaConsumerService:
+          topics: tp.maca.topic1
+          group-id: tp.maca.consumer-1
+    
+  webclient:
+    basic-auth-config:
+      user: ${SECRET_MACA_WEBCLIENT_USERNAME}
+      password: ${SECRET_MACA_WEBCLIENT_PASSWORD}
+    
+    
+  springdoc:
+    title: "API Catalogo de Maca"
+    description: "API de Maca para gestionar el catalogo de artefactos de aplicaciones en GISS"
+    version: "v1"
+    group-name: "mad.maca"
+    company-name: giss-framework
+    company-email: ODT-CORE.GISS-SSCC.DED@seg-social.es
+    base-package: giss.mad.catalogo
+

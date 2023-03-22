@@ -1,0 +1,81 @@
+serviceMeshEnabled: true
+placeholdersSubstitution:
+  enabled: true
+service:
+  spec:
+    ports:
+      insecure:
+        number: 8080
+      secure:
+        number: 8443
+      debug:
+        number: 8778
+virtualservice:
+  spec:
+    http:
+      match:
+        - uri:
+            prefix: /jobs
+        - uri:
+            prefix: /metrics
+        - uri:
+            prefix: /swagger-ui
+        - uri:
+            prefix: /
+      route:
+        port:
+          number: 8080
+
+secretenv:
+  - key: "SECRET_NAUA_USERNAME"
+    value: "dXNlcg=="
+  - key: "SECRET_NAUA_PASSWORD"
+    value: "e25vb3B9cGFzc3dvcmQ="
+  - key: "SECRET_MACA_DATASOURCE_URI"
+    value: encode_database_uri
+  - key: "SECRET_MACA_DATASOURCE_USERNAME"
+    value: encode_database_user
+  - key: "SECRET_MACA_DATASOURCE_PASSWORD"
+    value: encode_database_pwd
+  - key: "SECRET_MACA_WEBCLIENT_USERNAME"
+    value: "webclient-user"
+  - key: "SECRET_MACA_WEBCLIENT_PASSWORD"
+    value: "webclient-pwd"
+
+configenv:
+  - key: "SPRING_CONFIG_LOCATION"
+    value: "/opt/app/app-config/application.yml"
+  - key: "GISS_NAMESPACE"
+    value: "gpro-ed-maca"
+  - key: "KEYCLOACK_AUTH_SERVER_URL"
+    value: "http://Localhost:8080"
+  - key: "KEYCLOACK_REALM"
+    value: "eidas"
+  
+existingSecrets:
+  - name: "maca-kafka-app-credentials-properties"
+
+existingSecretsASVolumes:
+  - secretName: "maca-kafka-app-credentials-cert"
+    mountPath: "/opt/app/cert-config/"
+
+
+jaeger: true
+
+probes:
+  readiness:
+    path: /metrics/health/readiness
+    port: 8080
+    initialDelaySeconds: 40
+  liveness:
+    path: /metrics/health/liveness
+    port: 8080
+    initialDelaySeconds: 40
+
+gateway:
+  spec:
+    hosts:
+      port:
+        number: 80
+
+app-config-default-java-opt: -Djava.security.egd=file:/dev/./urandom

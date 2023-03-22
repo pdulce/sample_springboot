@@ -1,0 +1,51 @@
+#############################################################################################
+# Incluir aqui las propiedades a utilizar por Spring Boot y los componentes de la aplicación #
+##############################################################################################
+# ===================================================================
+# Spring Boot configuration properties
+# ===================================================================
+logging:
+  level:
+    es.giss.arch: DEBUG
+
+server:
+    port: 8086
+
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@ldap://oraoid1.portal.ss:389/ds32,cn=OracleContext,dc=portal,dc=ss
+    username: MACA_CATALOGO
+    password: maca_catalogo
+
+kafka:
+  bootstrap:
+    servers: localhost
+
+# ===================================================================
+# Giss framework properties
+# ===================================================================
+giss:
+
+  audit:
+    enabled: false
+
+  security:
+    web:
+      fake:
+        enabled: true
+        roles: ROLE_GISS_ACTUATOR
+        authorities: READ_FAKE, WRITE_FAKE
+        type-of-user: INTRANET
+
+  webclient:
+    basic-auth-config:
+      user: test
+      password: test
+
+  kafka:
+    #en local se desactiva la seguridad de kafka
+    default-config:
+      secured-connection:
+        enabled: false
+
