@@ -307,8 +307,6 @@ public final class CatalogoController {
         throw new ResponseStatusException(HttpStatus.NOT_MODIFIED);
     }
   }
-
-  /***** ****/
   @PostMapping("/roles/createPrivilege")
   public Permiso createPrivilege(final @RequestBody @NotNull @NotEmpty Permiso permisoObject) {
     Permiso permiso = this.permisoService.insertar(permisoObject);
@@ -340,8 +338,6 @@ public final class CatalogoController {
     }
 
   }
-
-  /*********** ****/
 
   @GetMapping("/permisos/getAll")
   public Collection<Permiso> getAllPermisos() {
@@ -377,8 +373,6 @@ public final class CatalogoController {
       throw new ResponseStatusException(HttpStatus.NOT_MODIFIED);
     }
   }
-
-  /*********** ****/
 
   @GetMapping("/grupos/getAll")
   public Collection<Grupo> getAllGrupos() {
@@ -422,9 +416,6 @@ public final class CatalogoController {
     }
   }
 
-
-  /*** URI MAPPINGS FOR CRUD operations for TipoElementoCatalogo***/
-
   @GetMapping("/tipoelemento/getAll")
   public Collection<TipoElementoCatalogo> getTiposElementos() {
     return this.tipoElementoCatalogoService.getAll();
@@ -463,7 +454,6 @@ public final class CatalogoController {
       throw new ResponseStatusException(HttpStatus.NOT_MODIFIED);
     }
   }
-  /************/
 
   @GetMapping("/atributoeje/getAll")
   public Collection<AtributoEje> getAtributosYEjes() {
@@ -531,8 +521,6 @@ public final class CatalogoController {
     }
   }
 
-  /*** URI MAPPINGS FOR CRUD operations for Valor Dominio ***/
-
   @GetMapping("/valordominio/getAll")
   public Collection<ValorDominio> getValoresDominio() {
     return this.valorDominioService.getAll();
@@ -584,8 +572,6 @@ public final class CatalogoController {
       throw new ResponseStatusException(HttpStatus.NOT_MODIFIED);
     }
   }
-
-  /*** URI MAPPINGS FOR CRUD operations for ElementoCatalogo***/
 
   @GetMapping("/elementocatalogo/getAll/{userId}")
   public Collection<ElementoCatalogo> getElementosDeCatalogo(final @PathVariable @NotNull @NotEmpty Integer userId) {
@@ -790,9 +776,6 @@ public final class CatalogoController {
             getFreeAndNotFreeElementsByUserGroupIdAndCatalogueTypeId(null, TipoElementoCatalogo.PROYECTO);
   }
 
-  /**
-   * con filtros que llevan incrustado el userId
-   **/
   @PostMapping("/elementocatalogo/search")
   public Collection<CatalogueElementFilter> searchElementsSummarized(
      final @RequestBody @NotNull @NotEmpty CatalogueElementFilter elementFilter) {
@@ -804,8 +787,6 @@ public final class CatalogoController {
      final @RequestBody @NotNull @NotEmpty CatalogueElementFilter elementFilter) {
     return elementoCatalogoService.searchElementsByFilter(elementFilter);
   }
-
-  /*** operaciones para entregas ***/
 
   @PostMapping("/entrega/create")
   public EntregaElementoCatalogo createDelivery(
@@ -909,7 +890,6 @@ public final class CatalogoController {
     return this.entregaElementoCatalogoService.getByIdOfElement(idOfElement);
   }
 
-  /*****   OPEN API OPERATIONS ******/
   @GetMapping("/elementocatalogo/getHierarchyById/{idOfElement}")
   public List<CatalogueNode> getHierarchyById(final @PathVariable @NotNull @NotEmpty
                                                               Integer idOfElement) {

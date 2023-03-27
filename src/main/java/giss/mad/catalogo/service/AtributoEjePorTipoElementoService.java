@@ -113,7 +113,7 @@ public class AtributoEjePorTipoElementoService {
 
       List<ValorDominio> valoresDominioAttr = new ArrayList<>();
       for (ValorDominio valorDominio : attribute.getDomainValues()) {
-        if (valorDominio.getForCatalogue().intValue() == Constantes.NUMBER_1) {
+        if (valorDominio.getDeleted() == null && valorDominio.getForCatalogue().intValue() == Constantes.NUMBER_1) {
           valoresDominioAttr.add(valorDominio);
         }
       }
@@ -181,7 +181,7 @@ public class AtributoEjePorTipoElementoService {
                 findAllByDeletedIsNullAndAxisAttributeId(attribute.getId(), Sort.by(Sort.Order.asc("id")));
         List<ValorDominio> newValores = new ArrayList<>();
         for (ValorDominio valorDominio : valores) {
-          if (valorDominio.getForDelivery().intValue() == Constantes.NUMBER_1) {
+          if (valorDominio.getDeleted() == null && valorDominio.getForDelivery().intValue() == Constantes.NUMBER_1) {
             newValores.add(valorDominio);
           }
         }
