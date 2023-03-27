@@ -4,7 +4,7 @@ spring:
 
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb;INIT=create schema if not exists MACA_CATALOGO
+    url: jdbc:h2:file:C:/GISS-MAD/testDB/testdbCat;INIT=create schema if not exists MACA_CATALOGO
     username: sa
     password:
   jpa:
