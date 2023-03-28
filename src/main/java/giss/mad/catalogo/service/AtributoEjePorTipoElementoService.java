@@ -169,7 +169,7 @@ public class AtributoEjePorTipoElementoService {
           ValoresEjesDeElemenCatalogoUsuario val = this.valoresEjesDeElemenCatalogoUsuarioRepository.
                   findByAxisAttributeIdAndCatalogElementIdAndDeletedIsNull(newAttribute.getId(), idElementCatalogue);
           String valoresDefault = "";
-          if (val.getDomainValues() != null && !val.getDomainValues().isEmpty()) {
+          if (val != null && val.getDomainValues() != null && !val.getDomainValues().isEmpty()) {
             for (ValorDominioDeAttrElemCat valConcrete : val.getDomainValues()) {
               valoresDefault = String.valueOf(valConcrete.getDomainValueId()).concat(";").concat(valoresDefault);
             }
