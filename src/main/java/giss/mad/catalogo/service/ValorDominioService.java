@@ -12,10 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 import javax.transaction.Transactional;
 
@@ -48,7 +45,8 @@ public class ValorDominioService {
       v.setAttributeName(this.atributoEjeRepository.findByIdAndDeletedIsNull(v.getAxisAttributeId()).getName());
       if (v.getMasterDomainValues() != null) {
         for (ValorDominioCondicionadoPor conditionedBy : v.getMasterDomainValues()) {
-          conditionedBy.setName(this.valorDominioRepository.getById(conditionedBy.getDomainValueId()).getName());
+          conditionedBy.setName(this.valorDominioRepository.getReferenceById(conditionedBy.getDomainValueId()).
+                  getName());
           conditionedBy.setAttributeName(this.atributoEjeRepository.
                   findByIdAndDeletedIsNull(v.getAxisAttributeId()).getName());
         }
@@ -149,7 +147,7 @@ public class ValorDominioService {
 
   @Transactional
   public final ValorDominio actualizar(final ValorDominio valorDominio) {
-    List<ValorDominioCondicionadoPor> nuevosValuesMaster = new ArrayList();
+    List<ValorDominioCondicionadoPor> nuevosValuesMaster = new ArrayList<>();
     if (valorDominio.getMasterDomainValues() != null) {
       nuevosValuesMaster.addAll(valorDominio.getMasterDomainValues());
     }
