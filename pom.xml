@@ -29,10 +29,6 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 386545a8652b88d80ceb183cf6c2f52b652aeadf
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
