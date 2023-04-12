@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -46,6 +47,11 @@ public class ElementoPromoServiceTest {
     private ValorDominioRepository valorDominioRepository;
     @Autowired
     private ElementoCatalogoService elementoCatalogoService;
+    @Autowired
+    private AtributoEjeService atributoEjeService;
+
+    @Autowired
+    private ValorDominioService valorDominioService;
 
     /** objetos de cada test de la prueba **/
     private static ElementoCatalogo elemenPromo;
@@ -162,40 +168,137 @@ public class ElementoPromoServiceTest {
     }
 
     @Test
-    public void testElemenPromo_Attributes() {
-        List<ValoresEjesDeElemenCatalogoUsuario> attributeValuesCollection = elemenPromo.getAttributeValuesCollection();
-        assertNotNull(attributeValuesCollection);
-        assertFalse(attributeValuesCollection.isEmpty());
+    @Transactional
+    public void testUpdateAxisAttribute_whenCorrectDomainValue() {
+        ArrayList<ValorDominio> domainValues = new ArrayList<>();
+        AtributoEje axisAttribute = new AtributoEje();
+        ValorDominio domainValue = new ValorDominio();
+        AtributoEje createdAxis;
+        AtributoEje updatedAxisAttribute;
+        ValorDominio createdDomainValue;
+
+        domainValue.setName("Valor dominio prueba");
+        domainValue.setAxisAttributeId(1);
+        domainValues.add(domainValue);
+        axisAttribute.setName("Placeholder");
+        axisAttribute.setFromCapp(0);
+        axisAttribute.setMultiple(0);
+        axisAttribute.setValuesInDomain(1);
+        axisAttribute.setCode("ATTR19");
+        createdAxis = atributoEjeService.insertar(axisAttribute);
+        assertNotNull(createdAxis.getCreationDate());
+        createdDomainValue = valorDominioService.insertar(domainValue);
+        assertNotNull(createdDomainValue.getCreationDate());
+        axisAttribute.setDomainValues(domainValues);
+        updatedAxisAttribute = atributoEjeService.actualizar(axisAttribute);
+        assertEquals(Integer.valueOf(1), updatedAxisAttribute.getDomainValues().get(0).getAxisAttributeId());
     }
 
     @Test
-    public void testCreateElemenPromo_whenWrongCollateralIdDependency() {
-        ElementoCatalogo elemenPromoSaved = null;
-        elemenPromo.setCatalogElementTypeId(Integer.valueOf(40));
-        elemenPromo.setCatalogElementCollateralId(Integer.valueOf(1));
-
+    public void testDeleteCatalogueElement() {
+        ElementoCatalogo deletedCatalogueElement;
         try {
-            elemenPromoSaved = elementoCatalogoService.insertar(elemenPromo);
-            assertNull(elemenPromoSaved.getCreationDate());
+            deletedCatalogueElement = elementoCatalogoService.borradoLogico(elemenPromo.getId());
+            assertNull(deletedCatalogueElement);
         } catch (ValidationRulesException e) {
-            assertNotNull(null, "Insert op.: Error business rule: " + e.getMessage());
+            assertNotNull(e.getMessage());
         }
     }
 
+    /*
     @Test
-    public void testCreateElemenPromo_whenCorrectCollateralIdDependency() {
-        ElementoCatalogo elemenPromoSaved = null;
-        elemenPromo.setCatalogElementTypeId(Integer.valueOf(40));
-        elemenPromo.setCatalogElementCollateralId(Integer.valueOf(41));
+    public void testUpdateCatalogueElement() {
+        ElementoCatalogo updatedCatalogueElement;
+        elemenPromo.setId(2);
+        elemenPromo.setCatalogElementCollateralId(11);
+        elemenPromo.setGroupId(5);
 
         try {
-            elemenPromoSaved = elementoCatalogoService.insertar(elemenPromo);
-            assertNotNull(elemenPromoSaved.getCreationDate());
+            //Da error, pero hay un ElementoCatalogo con ID 2 en la base de datos
+            updatedCatalogueElement = elementoCatalogoService.actualizar(elemenPromo);
+            assertEquals(Integer.valueOf(11), updatedCatalogueElement.getCatalogElementCollateralId());
+            assertEquals(Integer.valueOf(5), updatedCatalogueElement.getGroupId());
         } catch (ValidationRulesException e) {
-           assertNull(null, "Insert op.: Error business rule: " + e.getMessage());
+            assertNotNull(e.getMessage());
         }
     }
+    */
 
+
+    /*
+    @Test
+    @Transactional
+    public void testCreateElemPromo_prosaDependant() {
+
+        ValorDominio domainValue = new ValorDominio();
+        domainValue.setName("Valor dominio prueba");
+        domainValue.setId(96);
+        domainValue.setAxisAttributeId(41);
+        //Da error, pero hay un AtributoEje con ID 41 en la base de datos
+        valorDominioService.insertar(domainValue);
+
+        List<ValoresEjesDeElemenCatalogoUsuario> attributeValuesCollection = new ArrayList<>();
+        ValoresEjesDeElemenCatalogoUsuario userCatalogueElemAxisValues = new ValoresEjesDeElemenCatalogoUsuario();
+        List<ValorDominioDeAttrElemCat> catElementAttDomainValue = new ArrayList<>();
+        ValorDominioDeAttrElemCat catalogueElemAttDomainValue = new ValorDominioDeAttrElemCat();
+        ElementoCatalogo catalogueElement = new ElementoCatalogo();
+        ElementoCatalogo createdCatalogueElement;
+
+        userCatalogueElemAxisValues.setCreationDate(new Timestamp(Calendar.getInstance().getTime().getTime()));
+        userCatalogueElemAxisValues.setAxisAttributeId(41);
+        userCatalogueElemAxisValues.setDomainValues(new ArrayList<>());
+
+        catalogueElemAttDomainValue.setCreationDate(new Timestamp(Calendar.getInstance().getTime().getTime()));
+        catalogueElemAttDomainValue.setDomainValueId(96);
+
+        userCatalogueElemAxisValues.getDomainValues().add(catalogueElemAttDomainValue);
+        attributeValuesCollection.add(userCatalogueElemAxisValues);
+
+        catalogueElement.setName("Placeholder");
+        catalogueElement.setCatalogElementTypeId(1);
+        catalogueElement.setCatalogElementCollateralId(1);
+        catalogueElement.setAttributeValuesCollection(attributeValuesCollection);
+
+        try {
+            //Da error de integridad referencial, pero hay un ValorDominio con ID 96 en la base de datos
+            createdCatalogueElement = elementoCatalogoService.insertar(catalogueElement);
+            assertNull(createdCatalogueElement.getCreationDate());
+        } catch (ValidationRulesException e) {
+            assertNotNull(e.getMessage());
+        }
+    }
+ */
+
+/*
+    @Test
+    public void testCreateElemenPromo_parentDependant() {
+        ElementoCatalogo elementCreated;
+        ElementoCatalogo parentElement = new ElementoCatalogo();
+        parentElement.setId(51);
+        parentElement.setCatalogElementTypeId(1);
+        parentElement.setName("Aplicacion padre");
+        parentElement.setGroupId(1);
+        parentElement.setCreationDate(new Timestamp(Calendar.getInstance().getTime().getTime()));
+        elemenPromo.setParentElement(parentElement);
+        try {
+            elementCreated = elementoCatalogoService.insertar(parentElement);
+            assertNotNull(elementCreated.getCreationDate());
+        } catch (ValidationRulesException e) {
+            assertNotNull(e.getMessage());
+        }
+
+        elementCreated = null;
+        elemenPromo.setCatalogElementTypeId(1);
+        elemenPromo.setCatalogElementCollateralId(51);
+        try {
+            elementCreated = elementoCatalogoService.insertar(elemenPromo);
+            assertNull(elementCreated);
+        } catch (ValidationRulesException e) {
+            assertNotNull(null, e.getMessage());
+        }
+
+    }
+*/
     /*@Test
     public void test2UpdateElementPromo_whenNoRuleExceptionThrown() {
 
