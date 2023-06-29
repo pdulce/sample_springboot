@@ -120,6 +120,7 @@ public class UsuarioService {
       innerUser.setRoleName(
               this.rolRepository.findByIdAndDeletedIsNull(innerUser.getRoleId()).getName());
     }
+    System.out.println(innerUser.getPermisos());
     return innerUser;
   }
 

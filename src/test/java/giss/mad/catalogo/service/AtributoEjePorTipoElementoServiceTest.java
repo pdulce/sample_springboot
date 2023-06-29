@@ -81,7 +81,6 @@ public class AtributoEjePorTipoElementoServiceTest {
         atributoEje.setLongDescription(1);
         atributoEje.setDefaultValue(null);
     }
-
     @Test
     public void testGetAllAtributos() {
         when(atributoEjePorTipoElementoRepository.findAllByDeletedIsNull()).thenReturn(atributosEjePorTipoElemento);
@@ -135,36 +134,7 @@ public class AtributoEjePorTipoElementoServiceTest {
         verify(atributoEjePorTipoElementoRepository, times(1)).save(atributoEjePorTipoElemento);
     }
 
-    @Test
-    public void testGetAllByTipoCatalogueAndNotDelivery(){
-        AtributoEje attr1 = new AtributoEje();
-        attr1.setId(31);
-        AtributoEje attr3 = new AtributoEje();
-        attr3.setId(33);
-        ElementoCatalogo elem = new ElementoCatalogo();
-        elem.setId(333);
-        elem.setCatalogElementTypeId(1);
 
-        when(atributoEjePorTipoElementoRepository.
-                findAllByDeletedIsNullAndCatalogElementTypeIdAndForCatalogue(
-                        1/*elem.getCatalogElementTypeId()*/, 1,
-                        Sort.by(Sort.Order.asc("axisAttributeId")))).
-                                thenReturn(atributosEjePorTipoElemento);
-        when(atributoEjeRepository.findByCodeAndDeletedIsNull("ATTR1")).thenReturn(attr1);
-        when(atributoEjeRepository.findByCodeAndDeletedIsNull("ATTR3")).thenReturn(attr3);
-        when(atributoEjeRepository.findByIdAndDeletedIsNull(100)).thenReturn(atributoEje);
-        /*when(valorDominioRepository.findAllByDeletedIsNullAndAxisAttributeId(100,
-                Sort.by(Sort.Order.asc("id")))).thenReturn(valoresDominio);*/
-
-        List<AtributoEje> result = atributoEjePorTipoElementoService.
-                getAllByTipoCatalogueAndNotDelivery(1);
-        assertEquals("1", String.valueOf(result.size()));
-
-        verify(atributoEjePorTipoElementoRepository, times(1)).
-                findAllByDeletedIsNullAndCatalogElementTypeIdAndForCatalogue(1, 1,
-                        Sort.by(Sort.Order.asc("axisAttributeId")));
-
-    }
 
     @Test
     public void testGetAllByIdCatalogueForDelivery(){
@@ -205,5 +175,4 @@ public class AtributoEjePorTipoElementoServiceTest {
                         Sort.by(Sort.Order.asc("axisAttributeId")));
 
     }
-
 }

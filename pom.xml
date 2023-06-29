@@ -99,7 +99,6 @@
                 <artifactId>pitest-maven</artifactId>
                 <version>1.11.7</version>
                 <configuration>
-                    <targetTests>giss.mad.catalogo.service.ElementoPromoServiceTest</targetTests>
                     <features>
                         <feature>+auto_threads</feature>
                     </features>

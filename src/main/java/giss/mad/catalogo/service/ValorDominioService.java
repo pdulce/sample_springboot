@@ -121,6 +121,7 @@ public class ValorDominioService {
   public final List<ValorDominio> getByName(final String name) {
     return this.valorDominioRepository.findByName(name);
   }
+
   @Transactional
   public final ValorDominio insertar(final ValorDominio valorDominio) {
     valorDominio.setCreationDate(new Timestamp(Calendar.getInstance().getTime().getTime()));
